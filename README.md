@@ -36,3 +36,14 @@ Este CorrelationId/RequestId é fácil de ser gerado no Kong
 Mas usar o Kong na Poc acho que não é o caso neh
 Ai a gente pode só explicar que simplificamos a Poc
 E colocamos o RequestId no Postman
+
+
+#EventSource
+
+https://learn.microsoft.com/en-us/dotnet/core/diagnostics/eventsource-getting-started
+
+https://microservices.io/patterns/data/event-sourcing.html
+
+https://www.eventstore.com/event-sourcing
+
+https://learn.microsoft.com/en-us/aspnet/core/tutorials/web-api-help-pages-using-swagger?view=aspnetcore-8.0&preserve-view=true#securing-swagger-ui-endpoints

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Security.Design.Net.Api.Models
 {
     [Table("Passagens")]
-    public class PassagemModel(int id, string origem, string destino, decimal valor, DateTime validade, bool ativa)
+    public class AirfareModel(int id, string origem, string destino, decimal valor, DateTime validade, bool ativa)
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

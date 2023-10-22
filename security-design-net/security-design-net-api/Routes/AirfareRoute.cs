@@ -1,9 +1,9 @@
 ﻿using MediatR;
-using Security.Design.Net.Api.DTOs.PassagemDTO;
+using Security.Design.Net.Api.DTOs.AirfareDTO;
 
 namespace Security.Design.Net.Api.Routes
 {
-    public static class PassagensRoute
+    public static class AirfareRoute
     {
         public static void MapPassagensEndpoint(this WebApplication app)
         {
@@ -12,7 +12,7 @@ namespace Security.Design.Net.Api.Routes
             passagensApi.MapPost("/", InserirAsync);
         }
 
-        private static  async Task<IResult> InserirAsync(PassagemCreateDTO dto, CancellationToken cancellationToken, IMediator mediator) //, IHttpContextAccessor httpContextAccessor)
+        private static  async Task<IResult> InserirAsync(AirfareCreateDTO dto, CancellationToken cancellationToken, IMediator mediator) //, IHttpContextAccessor httpContextAccessor)
         {
             try
             {

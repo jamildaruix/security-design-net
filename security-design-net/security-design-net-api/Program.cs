@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Security.Design.Net.Api.Context;
-using Security.Design.Net.Api.DTOs.PassagemDTO;
 using Security.Design.Net.Api.Repositories;
 using Security.Design.Net.Api.Routes;
 using System.Reflection;
@@ -30,21 +29,13 @@ builder.Services
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
 
-builder.Services.AddScoped<IPassagemRepository, PassagemRepository>();
+builder.Services.AddScoped<IAirfareRepository, PassagemRepository>();
 
 var app = builder.Build();
 
 app.MapPassagensEndpoint();
 
-
 var carrosApi = app.MapGroup("/carros");
-
-
-
-//var passagensApi = app.MapGroup("/passagens").WithOpenApi();
-
-//passagensApi.MapPost("/", async (PassagemCreateDTO dto, IPassagensRoute passagensRoute, CancellationToken cancellationToken) 
-//    =>  await passagensRoute.InserirAsync(dto, cancellationToken));
 
 
 if (app.Environment.IsDevelopment())

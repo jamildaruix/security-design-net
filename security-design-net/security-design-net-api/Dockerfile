@@ -10,6 +10,9 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
     clang zlib1g-dev
+
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=true  
+
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["security-design-net-api/security-design-net-api.csproj", "security-design-net-api/"]

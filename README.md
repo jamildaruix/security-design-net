@@ -4,6 +4,22 @@
 
 https://docs.google.com/presentation/d/14R8AZeC97lXQ1BRHEei22UHfkSjTMa0k/edit#slide=id.p1
 
+# Comandos EF
+
+## Visual Studio
+
+``` bash
+Add-Migration InitialCreate
+Update-Database
+```
+
+## VS Code
+
+``` bash
+dotnet ef migrations add InitialCreate 
+dotnet ef database update
+```
+
 # Objetivo
 
 Registro de Passagens de Veículo por câmeras de Trânsito
@@ -38,6 +54,7 @@ Ai a gente pode só explicar que simplificamos a Poc
 E colocamos o RequestId no Postman
 
 
+
 #EventSource
 
 https://learn.microsoft.com/en-us/dotnet/core/diagnostics/eventsource-getting-started
@@ -47,3 +64,11 @@ https://microservices.io/patterns/data/event-sourcing.html
 https://www.eventstore.com/event-sourcing
 
 https://learn.microsoft.com/en-us/aspnet/core/tutorials/web-api-help-pages-using-swagger?view=aspnetcore-8.0&preserve-view=true#securing-swagger-ui-endpoints
+
+https://github.com/dotnet/csharplang/blob/fe9915c0708cf95c308cce33983373641fc1b60d/proposals/primary-constructors.md#field-targeting-attributes-for-captured-primary-constructor-parameters
+
+https://learn.microsoft.com/pt-br/ef/core/what-is-new/ef-core-8.0/plan#aot-and-trimming-for-adonet
+
+https://code-maze.com/dotnet-minimal-api/
+
+https://andrewlock.net/using-cancellationtokens-in-asp-net-core-minimal-apis/

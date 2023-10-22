@@ -1,5 +1,7 @@
-using Microsoft.OpenApi.Models;
-using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
+using Security.Design.Net.Api.Context;
+using Security.Design.Net.Api.DTOs.PassagemDTO;
+using Security.Design.Net.Api.Routes;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateSlimBuilder(args);
@@ -11,6 +13,20 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 {
     options.SerializerOptions.TypeInfoResolverChain.Insert(0, AppJsonSerializerContext.Default);
 });
+
+
+var directoryProject = Directory.GetCurrentDirectory();
+
+
+builder.Configuration
+       .SetBasePath(directoryProject)
+       .AddJsonFile(path: "appsettings.json", optional: false, reloadOnChange: true);
+
+builder.Services
+       .AddDbContext<ExampleDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")!));
+
+builder.Services.AddScoped<IPassagensRoute, PassagensRoute>();
+
 
 var app = builder.Build();
 
@@ -30,12 +46,13 @@ todosApi.MapGet("/{id}", (int id) =>
         : Results.NotFound()).WithName("GetWeatherForecast2")
 .WithOpenApi();
 
+var carrosApi = app.MapGroup("/carros");
 
-app.UseSwaggerUI(options =>
-{
-    options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-    options.RoutePrefix = string.Empty;
-});
+
+var passagensApi = app.MapGroup("/passagens");
+
+passagensApi.MapPost("/", async (PassagemCreateDTO dto, IPassagensRoute passagensRoute, CancellationToken token) => await passagensRoute.InserirAsync(dto, token));
+
 
 if (app.Environment.IsDevelopment())
 {

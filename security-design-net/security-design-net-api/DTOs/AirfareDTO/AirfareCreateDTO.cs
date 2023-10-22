@@ -2,4 +2,4 @@
 
 namespace Security.Design.Net.Api.DTOs.AirfareDTO;
 
-public record AirfareCreateDTO(string origem, string destino, decimal valor, DateTime validade) : IRequest<bool>;
+public record AirfareCreateDTO(string Origem, string Destino, decimal Valor, DateTime Validade) : IRequest<bool>;

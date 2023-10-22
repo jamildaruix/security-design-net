@@ -29,13 +29,11 @@ builder.Services
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
 
-builder.Services.AddScoped<IAirfareRepository, PassagemRepository>();
+builder.Services.AddScoped<IAirfareRepository, AirfareRepository>();
 
 var app = builder.Build();
 
-app.MapPassagensEndpoint();
-
-var carrosApi = app.MapGroup("/carros");
+app.MapAirfareEndpoint();
 
 
 if (app.Environment.IsDevelopment())

@@ -9,7 +9,8 @@ namespace Security.Design.Net.Api.Handlers.Commands
     {
         public async Task<bool> Handle(AirfareCreateDTO request, CancellationToken cancellationToken )
         {
-            AirfareModel model = new(0, request.origem, request.destino, request.valor, request.validade, true);
+            AirfareModel model = new(0, request.Origem, request.Destino, request.Valor, request.Validade, true);
+
             model = await _airfareRepository.InsertAsync(model, cancellationToken);
 
             return model.Id > 0;

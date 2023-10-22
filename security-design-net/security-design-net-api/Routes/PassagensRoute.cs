@@ -1,26 +1,33 @@
-﻿using Security.Design.Net.Api.Context;
+﻿using MediatR;
 using Security.Design.Net.Api.DTOs.PassagemDTO;
-using Security.Design.Net.Api.Models;
 
 namespace Security.Design.Net.Api.Routes
 {
-    public record PassagensRoute(ExampleDbContext exampleDbContext) : IPassagensRoute
+    public static class PassagensRoute
     {
-
-        public async Task<IResult> InserirAsync(PassagemCreateDTO dto, CancellationToken cancellationToken)
+        public static void MapPassagensEndpoint(this WebApplication app)
         {
-            Console.WriteLine("AGUARDANDO ...");
+            var passagensApi = app.MapGroup("/passagens");
 
+            passagensApi.MapPost("/", InserirAsync);
+        }
 
-            //await Task.Delay(int.MaxValue, cancellationToken);
+        private static  async Task<IResult> InserirAsync(PassagemCreateDTO dto, CancellationToken cancellationToken, IMediator mediator) //, IHttpContextAccessor httpContextAccessor)
+        {
+            try
+            {
+                //    var userId = HttpContextUtility.GetUserId(httpContextAccessor);
+                //    var user = await mediator.Send(new GetUserProfileQuery(userId));
 
-            //cancellationToken.ThrowIfCancellationRequested();
+                var returns = await mediator.Send(dto, cancellationToken);
 
+                return TypedResults.Ok(returns);
 
-            exampleDbContext.PassagemModels.Add(new PassagemModel(0, "teste origem", "teste destino", 1.9M, DateTime.Now, true));
-            await exampleDbContext.SaveChangesAsync();
-
-            return TypedResults.Ok();
+            }
+            catch (Exception ex)
+            {
+                return TypedResults.BadRequest(ex); 
+            }
         }
     }
 }

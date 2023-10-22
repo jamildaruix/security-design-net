@@ -1,7 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Security.Design.Net.Api.Context;
 using Security.Design.Net.Api.DTOs.PassagemDTO;
+using Security.Design.Net.Api.Repositories;
 using Security.Design.Net.Api.Routes;
+using System.Reflection;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateSlimBuilder(args);
@@ -25,33 +27,24 @@ builder.Configuration
 builder.Services
        .AddDbContext<ExampleDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")!));
 
-builder.Services.AddScoped<IPassagensRoute, PassagensRoute>();
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
+
+builder.Services.AddScoped<IPassagemRepository, PassagemRepository>();
 
 var app = builder.Build();
 
-var sampleTodos = new Todo[] {
-    new(1, "Walk the dog"),
-    new(2, "Do the dishes", DateOnly.FromDateTime(DateTime.Now)),
-    new(3, "Do the laundry", DateOnly.FromDateTime(DateTime.Now.AddDays(1))),
-    new(4, "Clean the bathroom"),
-    new(5, "Clean the car", DateOnly.FromDateTime(DateTime.Now.AddDays(2)))
-};
+app.MapPassagensEndpoint();
 
-var todosApi = app.MapGroup("/todos");
-todosApi.MapGet("/", () => sampleTodos).WithName("GetWeatherForecast").WithOpenApi(); ;
-todosApi.MapGet("/{id}", (int id) =>
-    sampleTodos.FirstOrDefault(a => a.Id == id) is { } todo
-        ? Results.Ok(todo)
-        : Results.NotFound()).WithName("GetWeatherForecast2")
-.WithOpenApi();
 
 var carrosApi = app.MapGroup("/carros");
 
 
-var passagensApi = app.MapGroup("/passagens");
 
-passagensApi.MapPost("/", async (PassagemCreateDTO dto, IPassagensRoute passagensRoute, CancellationToken token) => await passagensRoute.InserirAsync(dto, token));
+//var passagensApi = app.MapGroup("/passagens").WithOpenApi();
+
+//passagensApi.MapPost("/", async (PassagemCreateDTO dto, IPassagensRoute passagensRoute, CancellationToken cancellationToken) 
+//    =>  await passagensRoute.InserirAsync(dto, cancellationToken));
 
 
 if (app.Environment.IsDevelopment())
@@ -64,10 +57,7 @@ if (app.Environment.IsDevelopment())
 
 app.Run();
 
-public record Todo(int Id, string? Title, DateOnly? DueBy = null, bool IsComplete = false);
-
-[JsonSerializable(typeof(Todo[]))]
+[JsonSerializable(typeof(object))]
 internal partial class AppJsonSerializerContext : JsonSerializerContext
 {
-
 }

@@ -1,3 +1,5 @@
-﻿namespace Security.Design.Net.Api.DTOs.PassagemDTO;
+﻿using MediatR;
 
-public record PassagemCreateDTO(string origem, string destino, decimal valor, DateTime validade);
+namespace Security.Design.Net.Api.DTOs.PassagemDTO;
+
+public record PassagemCreateDTO(string origem, string destino, decimal valor, DateTime validade) : IRequest<bool>;

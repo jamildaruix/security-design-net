@@ -6,5 +6,6 @@ namespace Security.Design.Net.Api.Repositories
     {
         public Task<AirfareModel> InsertAsync(AirfareModel model, CancellationToken cancellation);
         public Task<AirfareModel> UpdateAsync(AirfareModel model, CancellationToken cancellation);
+        public ValueTask<AirfareModel?> GetByIdAsync(int id, CancellationToken cancellation);
     }
 }

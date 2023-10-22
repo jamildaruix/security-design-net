@@ -5,6 +5,8 @@ namespace Security.Design.Net.Api.Repositories
 {
     public record AirfareRepository(ExampleDbContext exampleDbContext) : IAirfareRepository
     {
+        public ValueTask<AirfareModel?> GetByIdAsync(int id, CancellationToken cancellation) => exampleDbContext.AirfareModels.FindAsync(id, cancellation);
+
         public async Task<AirfareModel> InsertAsync(AirfareModel model, CancellationToken cancellation)
         {
             exampleDbContext.Add(model);

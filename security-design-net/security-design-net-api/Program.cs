@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Security.Design.Net.Api.Context;
+using Security.Design.Net.Api.Events;
 using Security.Design.Net.Api.Repositories;
 using Security.Design.Net.Api.Routes;
 using System.Reflection;
@@ -29,7 +30,8 @@ builder.Services
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
 
-builder.Services.AddScoped<IAirfareRepository, AirfareRepository>();
+builder.Services.AddScoped<IAirfareRepository, AirfareRepository>()
+                .AddScoped<IEventStore, BuyTicketAirfaceVersionEvent>();
 
 var app = builder.Build();
 

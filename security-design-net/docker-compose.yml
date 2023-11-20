@@ -1,13 +1,26 @@
 version: '3.4'
 
+volumes:
+  mysql-data:
+
+networks:
+  security-api:
+    driver: bridge
+
 services:
-  security-design-net-api:
-    image: ${DOCKER_REGISTRY-}securitydesignnetapi
+  security-design-api:
+    image: ${DOCKER_REGISTRY-}securitydesignapi
     build:
       context: .
-      dockerfile: security-design-net-api/Dockerfile
+      dockerfile: security-design-api/Dockerfile
+    networks:
+      - security-api
     links:
       - mongo
+      - sql_server
+    depends_on:
+      - mongo
+      - sql_server
   mongo:
     image: mongo:5.0
     container_name: mongo
@@ -15,6 +28,8 @@ services:
         - MONGO_INITDB_ROOT_USERNAME=root
         - MONGO_INITDB_ROOT_PASSWORD=password
     restart: unless-stopped
+    networks:
+      - security-api
     ports:
       - "27017:27017"
   mongo-express:
@@ -26,8 +41,23 @@ services:
       - ME_CONFIG_MONGODB_URL=mongodb://root:password@mongo:27017/?authSource=admin
       - ME_CONFIG_BASICAUTH_USERNAME=mexpress
       - ME_CONFIG_BASICAUTH_PASSWORD=mexpress
+    networks:
+      - security-api
     links:
       - mongo
-    restart: unless-stopped
+    restart: always
     ports:
       - "8081:8081"
+  sql_server:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: sql_server
+    restart: always
+    environment:
+      SA_PASSWORD: P@ssw0rd123!
+      ACCEPT_EULA: Y
+    networks:
+      - security-api
+    ports:
+      - "1433:1433"
+    volumes:
+      - ./mysql-data:/var/lib/mysql

@@ -72,3 +72,5 @@ https://learn.microsoft.com/pt-br/ef/core/what-is-new/ef-core-8.0/plan#aot-and-t
 https://code-maze.com/dotnet-minimal-api/
 
 https://andrewlock.net/using-cancellationtokens-in-asp-net-core-minimal-apis/
+
+docker inspect --format '{{.NetworkSettings.IPAddress}}' nome_do_container_ou_id_do_container

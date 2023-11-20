@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "security-design-net-api", "
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{16B4BE1E-BD73-42C6-8635-3E0D019AACAA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "security-design-api", "security-design-api\security-design-api.csproj", "{2016258D-5324-45F8-852E-15A31EC1BC24}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{16B4BE1E-BD73-42C6-8635-3E0D019AACAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{16B4BE1E-BD73-42C6-8635-3E0D019AACAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{16B4BE1E-BD73-42C6-8635-3E0D019AACAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2016258D-5324-45F8-852E-15A31EC1BC24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2016258D-5324-45F8-852E-15A31EC1BC24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2016258D-5324-45F8-852E-15A31EC1BC24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2016258D-5324-45F8-852E-15A31EC1BC24}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

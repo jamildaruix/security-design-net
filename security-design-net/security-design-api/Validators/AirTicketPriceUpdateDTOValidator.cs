@@ -14,22 +14,17 @@ namespace Security.Design.Api.Validators
             this.airfareRepository = airfareRepository;
 
             RuleFor(p => p.HeadersApp).NotNull();
-
-            RuleFor(x => x.Id)
-                              .GreaterThan(0).WithMessage("ID inválido")
-                              .MustAsync(Exists)
-                              .WithMessage("ID não encontrado");
-
+            RuleFor(p => p.Id).GreaterThan(0).WithMessage("ID inválido").WithMessage("ID não encontrado");
             RuleFor(x => x.Valor).GreaterThan(0).WithMessage("Valor inválido");
 
+            RuleFor(x => x.Id)
+                .MustAsync(async (id, cancellationToken) =>
+                {
+                    return (await Exists(id, cancellationToken));
+                })
+                .WithMessage("Registro não localizado");
         }
 
-        private async Task<bool> Exists(int id, CancellationToken cancellation)
-        {
-
-            var returns = await airfareRepository.AnyAsync(id, cancellation);
-
-            return returns;
-        }
+        private async Task<bool> Exists(int id, CancellationToken cancellation) => await airfareRepository.AnyAsync(id, cancellation);
     }
 }

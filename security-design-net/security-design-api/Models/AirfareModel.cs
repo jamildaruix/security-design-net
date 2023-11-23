@@ -17,8 +17,10 @@ namespace Security.Design.Api.Models
         public string Destino { get; init; } = destino;
 
         [Column(TypeName = "decimal(5, 2)")]
-        public decimal Valor { get; init; } = valor;
+        public decimal Valor { get; private set; } = valor;
         public DateTime Validade { get; init; } = validade;
         public bool Ativa { get; init; } = ativa;
+
+        public void AlterarDados(decimal valor) => this.Valor = valor;
     }
 }

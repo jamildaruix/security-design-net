@@ -3,6 +3,7 @@ using FluentValidation.Results;
 using MediatR;
 using Security.Design.Api.DTOs.AirfareDTO;
 using Security.Design.Api.Events;
+using Security.Design.Api.Events.AirfaceEvents;
 using Security.Design.Api.Models;
 using Security.Design.Api.Repositories;
 
@@ -25,7 +26,7 @@ namespace Security.Design.Api.Handlers.Commands
 
             model = await _airfareRepository.InsertAsync(model, cancellationToken);
 
-            eventStore.AdicionarEvento(new BuyTicketAirfaceVersionOneEvent(model.Destino, model.Valor));
+            eventStore.AdicionarEvento(new BuyTicketAirfaceVersionOneEvent(model.Id, model.Destino, model.Valor, request.HeadersApp.CorrelationID!.Value));
 
             return new AirFareCreateResponse(model.Id > 0, default!);
         }

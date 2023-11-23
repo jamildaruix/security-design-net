@@ -1,11 +1,6 @@
-﻿using FluentValidation;
-using FluentValidation.Results;
-using MediatR;
-using Microsoft.AspNetCore.Http;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Security.Design.Api.DTOs.AirfareDTO;
-using System;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Security.Design.Api.Controllers
 {
@@ -18,7 +13,9 @@ namespace Security.Design.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IResult> Post([FromHeader] HeadersApp headersApp, [FromBody] AirfareCreateDTO dto, CancellationToken cancellationToken)
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(bool))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(List<Errors>))]
+        public async Task<IResult> Post(HeadersApp headersApp, [FromBody] AirfareCreateDTO dto, CancellationToken cancellationToken)
         {
             try
             {
@@ -41,12 +38,15 @@ namespace Security.Design.Api.Controllers
 
         }
 
-        [HttpPut]
-        public async Task<IResult> Put([FromHeader] HeadersApp headersApp, [FromRoute] int id, [FromBody] AirTicketPriceUpdateDTO dto, CancellationToken cancellationToken)
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(List<Errors>))]
+        public async Task<IResult> Put(HeadersApp headersApp, [FromRoute] int id, [FromBody] AirTicketPriceUpdateDTO dto, CancellationToken cancellationToken)
         {
             try
             {
                 dto.HeadersApp = headersApp;
+                dto.Id = id;
                 var returns = await mediator.Send(dto, cancellationToken);
 
                 if (returns.Status == false)
@@ -61,7 +61,6 @@ namespace Security.Design.Api.Controllers
             {
                 return TypedResults.BadRequest(ex);
             }
-
         }
     }
 }

@@ -8,19 +8,19 @@ networks:
     driver: bridge
 
 services:
-  security-design-api:
-    image: ${DOCKER_REGISTRY-}securitydesignapi
-    build:
-      context: .
-      dockerfile: security-design-api/Dockerfile
-    networks:
-      - security-api
-    links:
-      - mongo
-      - sql_server
-    depends_on:
-      - mongo
-      - sql_server
+#  security-design-api:
+#    image: ${DOCKER_REGISTRY-}securitydesignapi
+#    build:
+#      context: .
+#      dockerfile: security-design-api/Dockerfile
+#    networks:
+#      - security-api
+#    links:
+#      - mongo
+#      - sql_server
+#    depends_on:
+#      - mongo
+#      - sql_server
   mongo:
     image: mongo:5.0
     container_name: mongo
@@ -48,16 +48,16 @@ services:
     restart: always
     ports:
       - "8081:8081"
-  sql_server:
-    image: mcr.microsoft.com/mssql/server:2019-latest
-    container_name: sql_server
-    restart: always
-    environment:
-      SA_PASSWORD: P@ssw0rd123!
-      ACCEPT_EULA: Y
-    networks:
-      - security-api
-    ports:
-      - "1433:1433"
-    volumes:
-      - ./mysql-data:/var/lib/mysql
+#  sql_server:
+#    image: mcr.microsoft.com/mssql/server:2019-latest
+#    container_name: sql_server
+#    restart: always
+#    environment:
+#      SA_PASSWORD: P@ssw0rd123!
+#      ACCEPT_EULA: Y
+#    networks:
+#      - security-api
+#    ports:
+#      - "1433:1433"
+#    volumes:
+#      - ./mysql-data:/var/lib/mysql

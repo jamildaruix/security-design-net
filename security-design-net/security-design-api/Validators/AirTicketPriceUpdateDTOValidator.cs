@@ -11,7 +11,10 @@ namespace Security.Design.Api.Validators
 
         public AirTicketPriceUpdateDTOValidator(IAirfareRepository airfareRepository)
         {
+            this.airfareRepository = airfareRepository;
+
             RuleFor(p => p.HeadersApp).NotNull();
+
             RuleFor(x => x.Id)
                               .GreaterThan(0).WithMessage("ID inválido")
                               .MustAsync(Exists)
@@ -23,7 +26,10 @@ namespace Security.Design.Api.Validators
 
         private async Task<bool> Exists(int id, CancellationToken cancellation)
         {
-            return await airfareRepository.AnyAsync(id, cancellation);
+
+            var returns = await airfareRepository.AnyAsync(id, cancellation);
+
+            return returns;
         }
     }
 }

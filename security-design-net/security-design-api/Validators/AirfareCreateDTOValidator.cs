@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Security.Design.Api.DTOs.AirfareDTO;
-using Security.Design.Api.Models;
 
 namespace Security.Design.Api.Validators
 {
@@ -15,7 +14,7 @@ namespace Security.Design.Api.Validators
             RuleFor(dto => dto.Valor).GreaterThan(0).WithMessage("O Valor deve ser maior que zero.");
             RuleFor(dto => dto.Validade).Must(BeAValidDate).WithMessage("Data de Validade inválida.");
         }
-        private static bool BeAValidDate(DateTime date) => date > DateTime.UtcNow;
+        private static bool BeAValidDate(DateTime date) => date < DateTime.Now;
 
     }
 }

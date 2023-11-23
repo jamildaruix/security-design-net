@@ -25,7 +25,7 @@ namespace Security.Design.Api.Handlers.Commands
 
             model = await _airfareRepository.InsertAsync(model, cancellationToken);
 
-            eventStore.AdicionarEvento(new BuyTicketAirfaceVersionOneEvent(model.Id, model.Destino, model.Valor));
+            eventStore.AdicionarEvento(new BuyTicketAirfaceVersionOneEvent(model.Destino, model.Valor));
 
             return new AirFareCreateResponse(model.Id > 0, default!);
         }

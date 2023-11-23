@@ -1,52 +1,75 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson.Serialization.IdGenerators;
+using MongoDB.Driver;
+using SharpCompress.Common;
 
 namespace Security.Design.Api.Events
 {
     public interface IEvent
     {
+        ObjectId? _id { get; }
         string TypeEvent { get; }
         Guid Guid { get; }
-        int Id { get; }
     }
 
     public record BuyTicketAirfaceVersionOneEvent : IEvent
     {
-        public BuyTicketAirfaceVersionOneEvent(int id, string destino, decimal valor)
+        public BuyTicketAirfaceVersionOneEvent(string destino, decimal valor)
         {
-            Id = id;
+            _id = ObjectId.GenerateNewId();
             Destino = destino;
             Valor = valor;
         }
 
+        [BsonElement("TypeEvent")]
         public string TypeEvent => nameof(BuyTicketAirfaceVersionOneEvent);
 
+        [BsonElement("Guid")]
         public Guid Guid => Guid.NewGuid();
 
-        public int Id { get; }
-        public string Destino { get; }
-        public decimal Valor { get; }
+        [BsonElement("Destino")]
+        public string Destino { get; init; }
+
+        [BsonElement("Valor")]
+        public decimal Valor { get; init; }
+
+        [BsonId(IdGenerator = typeof(ObjectIdGenerator))]
+        public ObjectId? _id { get; set; }
     }
 
     public record BuyTicketAirfaceVersionTwoEvent : IEvent
     {
-        public BuyTicketAirfaceVersionTwoEvent(int id, string origem, string destino, decimal valor, DateTime validade)
+        public BuyTicketAirfaceVersionTwoEvent(string origem, string destino, decimal valor, DateTime validade)
         {
-            Id = id;
+            _id = ObjectId.GenerateNewId();
             Origem = origem;
             Destino = destino;
             Valor = valor;
             ValidadeBilhere = validade;
         }
 
+        [BsonId(IdGenerator = typeof(ObjectIdGenerator))]
+        public ObjectId? _id { get; init; }
+
+        [BsonElement("TypeEvent")]
         public string TypeEvent => nameof(BuyTicketAirfaceVersionTwoEvent);
 
+        [BsonElement("Guid")]
         public Guid Guid => Guid.NewGuid();
 
-        public int Id { get; }
-        public string Origem { get; set; }
-        public string Destino { get; }
-        public decimal Valor { get; }
-        public DateTime ValidadeBilhere { get; set; }
+
+        [BsonElement("Origem")]
+        public string Origem { get; init; }
+
+        [BsonElement("Destino")]
+        public string Destino { get; init; }
+
+        [BsonElement("Destino")]
+        public decimal Valor { get; init; }
+
+        [BsonElement("Destino")]
+        public DateTime ValidadeBilhere { get; init; }
     }
 
     public interface IEventStore
@@ -57,23 +80,27 @@ namespace Security.Design.Api.Events
 
     public class BuyTicketAirfaceVersionEvent : IEventStore
     {
-        private readonly IMongoCollection<IEvent> _events;
+        private readonly IMongoDatabase database;
+        private IMongoCollection<BsonDocument> _events;
+        private const string collectionName = "example-tdc";
 
         public BuyTicketAirfaceVersionEvent()
         {
-            var client = new MongoClient("mongodb://localhost:27017");
-            var database = client.GetDatabase("example-tdc");
-            _events = database.GetCollection<IEvent>("pyament-airfare");
+            var client = new MongoClient("mongodb://root:password@localhost:27017");
+            database = client.GetDatabase("test");
         }
+
 
         public void AdicionarEvento<T>(T evento) where T : IEvent
         {
-            _events.InsertOne(evento);
+            _events = database.GetCollection<BsonDocument>(collectionName);
+            _events.InsertOne(evento.ToBsonDocument());
         }
+
 
         public void ProcessarEventos<T>(Action<T> processador) where T : IEvent
         {
-            var eventos = _events.Find(Builders<IEvent>.Filter.Empty).ToList();
+            var eventos = _events.Find(Builders<BsonDocument>.Filter.Empty).ToList();
             foreach (var evento in eventos)
             {
                 if (evento is T eventoT)
@@ -83,6 +110,4 @@ namespace Security.Design.Api.Events
             }
         }
     }
-
-
 }

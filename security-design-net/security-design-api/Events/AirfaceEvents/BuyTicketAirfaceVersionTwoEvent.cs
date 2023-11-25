@@ -8,7 +8,9 @@ namespace Security.Design.Api.Events
 {
     public record BuyTicketAirfaceVersionTwoEvent : IEvent
     {
-        public BuyTicketAirfaceVersionTwoEvent(int idModel, string origem, string destino, decimal valor, DateTime validade, Guid correlationID)
+        private readonly string hashOld;
+
+        public BuyTicketAirfaceVersionTwoEvent(int idModel, string origem, string destino, decimal valor, DateTime validade, Guid correlationID, string hashOld)
         {
             _id = ObjectId.GenerateNewId();
             IdModel = idModel;
@@ -17,6 +19,7 @@ namespace Security.Design.Api.Events
             Valor = valor;
             ValidadeBilhere = validade;
             CorrelationID = correlationID;
+            this.hashOld = hashOld;
         }
 
         [BsonId(IdGenerator = typeof(ObjectIdGenerator))]
@@ -57,7 +60,7 @@ namespace Security.Design.Api.Events
         {
             using (SHA256 sha256 = SHA256.Create())
             {
-                string dataToHash = $"{CorrelationID}-{IdModel}-{Origem}-{Destino}-{Valor}-{ValidadeBilhere}";
+                string dataToHash = $"{CorrelationID}-{IdModel}-{Origem}-{Destino}-{Valor}-{ValidadeBilhere}-{hashOld}";
                 byte[] hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(dataToHash));
 
                 return BitConverter.ToString(hashedBytes).Replace("-", "").ToLowerInvariant();

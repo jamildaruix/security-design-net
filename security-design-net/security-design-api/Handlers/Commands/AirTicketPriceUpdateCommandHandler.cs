@@ -25,14 +25,17 @@ namespace Security.Design.Api.Handlers.Commands
             model = await _airfareRepository.UpdateAsync(model!, cancellationToken);
 
             var eventTwo = eventStore.ObterEventoPorIdModel<BuyTicketAirfaceVersionTwoEvent>(model.Id);
+            string hashOld = null;
 
             if (eventTwo == null)
             {
                 var eventOne = eventStore.ObterEventoPorIdModel<BuyTicketAirfaceVersionOneEvent>(model.Id);
-
+                hashOld = eventOne.HashEvent;
             }
 
-            eventStore.AdicionarEvento(new BuyTicketAirfaceVersionTwoEvent(model.Id, model.Origem, model.Destino, model.Valor, model.Validade, request.HeadersApp.CorrelationID!.Value));
+            hashOld ??= eventTwo!.HashEvent;
+
+            eventStore.AdicionarEvento(new BuyTicketAirfaceVersionTwoEvent(model.Id, model.Origem, model.Destino, model.Valor, model.Validade, request.HeadersApp.CorrelationID!.Value, hashOld));
 
             return new AirFareUpdateResponse(true, default!);
         }
